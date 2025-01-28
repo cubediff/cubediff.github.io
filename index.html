@@ -1,0 +1,200 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <title>CubeDiff: Repurposing Diffusion-Based Image Models for Panorama Generation</title>
+    <meta name="description" content="CubeDiff: Repurposing Diffusion-Based Image Models for Panorama Generation" />
+    
+    <meta property="og:title" content="CubeDiff: Repurposing Diffusion-Based Image Models for Panorama Generation" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.cubediff.github.io" />
+    <meta property="og:description" content="Repurposing Diffusion-Based Image Models for Panorama Generation" />
+    <meta property="og:image" content="assets/images/content.png" />
+    
+    <link rel="icon" href="assets/images/favicon.ico" />
+    
+    <link rel="stylesheet" href="static/css/style.css" />   
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200&family=Roboto:wght@400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.4/css/academicons.min.css" />
+    <link rel="stylesheet" href="static/css/photoswipe.css">
+    <link rel="stylesheet" href="static/css/pannellum.css">
+
+    <script src="https://kit.fontawesome.com/f49eb91832.js" crossorigin="anonymous"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script> 
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="static/js/pannellum.js"></script>
+    <script src="static/js/main.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>CubeDiff: Repurposing Diffusion-Based Image Models for Panorama Generation</h1>
+        <div id="authors">
+            <div>
+                <img src="static/images/thumbs/nikolai.png" alt="Nikolai" />
+                <br />
+                Nikolai Kalischek <sup>1,2</sup>
+            </div>
+            <div>
+                <img src="static/images/thumbs/michael.png" alt="Michael" />
+                <br />
+                Michael Oechsle <sup>2</sup>
+            </div>
+            <div>
+                <img src="static/images/thumbs/fabian.png" alt="Fabian" />
+                <br />
+                Fabian Manhardt <sup>2</sup>
+            </div>
+            <div>
+                <img src="static/images/thumbs/philipp.png" alt="Philipp" />
+                <br />
+                Philipp Henzler <sup>2</sup>
+            </div> 
+            <div>
+                <img src="static/images/thumbs/konrad.png" alt="Konrad" />
+                <br />
+                Konrad Schindler <sup>1</sup>
+            </div> 
+            <div>
+                <img src="static/images/thumbs/federico.png" alt="Federico" />
+                <br />
+                Federico Tombari <sup>2</sup>
+            </div> 
+        </div>     
+        <p style="text-align: center;text-align-last: center;">
+            <sup>1</sup> ETH Z&uuml;rich <sup>2</sup> Google
+            <br />
+            <br />
+        </p>
+        <div>
+            <a class="button" target="_blank" href="#">                     
+                <i class="ai ai-arxiv ai-lg fa-bounce-hover"></i>&nbsp; Arxiv
+            </a>
+        </div>
+    </header>
+    <section id="videos">
+        <img src="static/images/spins/abandoned_2_spinning.gif" alt="spinning" />
+        <img src="static/images/spins/hotairballoon_spinning.gif" alt="spinning" />
+        <img src="static/images/spins/industrial_spinning.gif" alt="spinning" />
+        <img src="static/images/spins/greenhouse_spinning.gif" alt="spinning" />
+        <img src="static/images/spins/kitchen_spinning.gif" alt="spinning" />
+        <img src="static/images/spins/lonelytree_spinning.gif" alt="spinning" />
+    </section>
+    <section style="display:flex; justify-content:center; margin-top: 2rem;">
+        <h1 style="font-size: 3rem;">tl;dr</h1>
+    </section>
+    <section id="intro">
+        <div>
+            <img src="static/images/cubediff.png" style="max-height: 200px;" alt="CubeDiff" />
+        </div>
+        <div class="vertical-aligned">
+            <p style="text-align: justify; padding: 0 20px;">We introduce CubeDiff, a novel framework for generating 360° panoramas using diffusion-based image models. By leveraging cubemap representations and fine-tuning pretrained text-to-image models, CubeDiff simplifies the panorama generation process, delivering high-quality, consistent panoramas. The approach achieves state-of-the-art results with minimal architectural modifications, enabling detailed text control and exceptional visual fidelity.</p>
+        </div>  
+    </section>
+    <hr color="#e9e9e9" style="max-width: 560px; margin: auto; margin-bottom: 3rem; margin-top: 2rem;" />
+
+    <section class="wrapper">
+        <img style="width: 100%;" src="static/images/overview.png" alt="Overivew" />
+    </section>
+    
+    <section id="abstract" class="wrapper" style="margin-top: 2rem;">
+        <h1>Abstract</h1>
+        <p style="text-align: justify; margin-top: 1rem; padding: 0 20px;">
+            We introduce a novel method for generating 360° panoramas from text prompts or images. Our approach leverages recent advances in 3D generation by employing multi-view diffusion models to jointly synthesize the six faces of a cubemap. Unlike previous methods that rely on processing equirectangular projections or autoregressive generation, our method treats each face as a standard perspective image, simplifying the generation process and enabling the use of existing multi-view diffusion models. We demonstrate that these models can be adapted to produce high-quality cubemaps without requiring correspondence-aware attention layers. Our model allows for fine-grained text control, generates high resolution panorama images and generalizes well beyond its training set, whilst achieving state-of-the-art results, both qualitatively and quantitatively.
+        </p>
+    </section>
+    
+    <section class="wrapper" style="margin-top: 2rem;">
+        <h1>Method</h1>
+        <img style="width: 100%; margin-bottom: 1rem; margin-top: 1rem;" src="static/images/method.png" alt="Method" />
+        <p style="padding: 0 20px;">
+            CubeDiff introduces a method for generating high-quality 360° panoramas using a cubemap representation, dividing the panorama into six perspective views, each with a field-of-view of 90°. The cubemap representation mitigates the distortions typical of equirectangular projections, ensuring each face more closely resembles the perspective images used in the original training data. By leveraging pretrained text-to-image diffusion models, CubeDiff fine-tunes a Latent Diffusion Model (LDM) with inflated attention layers, enabling cross-view consistency while preserving pretrained attention weights.<br />
+            Operating on a 128×128×8 latent space, CubeDiff conditions the LDM on text embeddings and a single input view, with binary masks distinguishing clean conditioning latents from noisy target latents. Synchronized group normalization ensures uniform color across faces, while positional encodings derived from the cubemap’s 3D geometry guide spatial alignment. Overlapping predictions at cubemap edges further enhance coherence by ensuring seamless transitions between adjacent faces. We fine-tune only the attention layers of the LDM on a small dataset of cubemaps derived from equirectangular panoramas using the standard diffusion L2 loss.
+        </p>
+    </section>
+
+    <section id="qualitative" class="wrapper" style="margin-top: 2rem;">
+        <h1>Qualitative Results</h1>
+        <h2 style="margin-top: 1rem;">Equirectangular</h2>
+        <div id="gallery" style="margin-top: 1rem; display:flex; flex-wrap: wrap; justify-content:space-between; border-radius: 15px; overflow: hidden; row-gap: 5px;">  
+            <a href="static/images/panoramas/corral_reef_generated.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/corral_reef_generated.png" />  
+            </a>
+            <a href="static/images/panoramas/lighthouse_generated_3.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/lighthouse_generated_3.png" />  
+            </a>
+            <a href="static/images/panoramas/steampunk_generated.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/steampunk_generated.png" />  
+            </a>
+            <a href="static/images/panoramas/fantasy_forest_generated.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/fantasy_forest_generated.png" />  
+            </a>
+            <a href="static/images/panoramas/forest_gemini_generated.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/forest_gemini_generated.png" />  
+            </a>
+            <a href="static/images/panoramas/alice1_generated.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/alice1_generated.png" />  
+            </a>
+            <a href="static/images/panoramas/munch_generated.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/munch_generated.png" />  
+            </a>
+            <a href="static/images/panoramas/lighthouse_generated_2.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/lighthouse_generated_2.png" />  
+            </a>
+            <a href="static/images/panoramas/alice3_generated.png" data-pswp-width="2048" data-pswp-height="1024" target="_blank">    
+                <img src="static/images/panoramas/alice3_generated.png" />  
+            </a>
+        </div>
+        <h2 style="margin-top: 2rem;margin-bottom: 1rem;">Panorama Viewer</h2>
+        <div class="tabs is-centered" id="myTabs">
+            <ul></ul>
+        </div>
+        <div id="tabContent"></div>
+        
+        <div id="panoramas">
+            <div>
+                <h4 class="title is-size-5">Conditioning</h4>
+                <i id="cond-text"></i>
+                <div class="pt-5" id="cond-image"></div>
+            </div>
+            <div>
+                <h4 class="title is-size-">Panorama</h4>
+                <div id="panorama"></div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="citation" class="wrapper" style="margin-top: 2rem;">
+        <h1 style="margin-bottom: 1rem;">Cite</h1>
+        <pre style="text-align: left;background:#F2F2F2;padding:1rem;"><code>@article{XXXXX,
+  title={CubeDiff: Repurposing Diffusion-Based Image Models for Panorama Generation},
+  author={Kalischek, Nikolai and Oechsle, Michael and Manhardt, Fabian and Henzler, Philipp and 
+          Schindler, Konrad and Tombari, Federico},
+  journal={arXiv preprint arXiv:XXXX.XXXXXX},
+  year={2025}
+}
+</code></pre>               
+    </section>
+    
+    <footer>
+        <p>Copyright &copy; 2024 cubediff.github.io. All rights reserved.</p>
+    </footer>
+
+    <script type="module">
+        import PhotoSwipeLightbox from './static/js/photoswipe-lightbox.esm.min.js';
+        const lightbox = new PhotoSwipeLightbox({
+          gallery: '#gallery',
+          children: 'a',
+          pswpModule: () => import('./static/js/photoswipe.esm.min.js')
+        });
+        lightbox.init();
+    </script>
+</body>
+</html>
