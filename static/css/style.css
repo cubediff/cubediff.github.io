@@ -88,6 +88,24 @@ section#videos video {
     min-width: 200px;
 }
 
+#videos video {
+    flex: 0 0 calc(100% / 6); /* each video takes 1/6th of the row */
+}
+
+/* When the screen width is 1200px or less: 3 videos per row */
+@media (max-width: 1240px) {
+    #videos video {
+        flex: 0 0 calc(100% / 3);
+    }
+}
+
+/* When the screen width is 768px or less: 2 videos per row */
+@media (max-width: 768px) {
+    #videos video {
+        flex: 0 0 calc(100% / 2);
+    }
+}
+
 section#intro {       
     display: flex;
     flex-wrap: wrap;
